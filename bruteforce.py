@@ -36,43 +36,12 @@ def check_best_combo(liste):
     i = 0
     result = ''
     for key, value in combos.items():
-        if int(value['profit']) > i:
-            result = key, value
-            i = value['profit']
+        if value['cout'] < 500:
+            if i < int(value['profit']):
+                result = key, value
+                i = value['profit']
 
     return result
 
 
 print(check_best_combo(actions))
-
-
-# generate all combinations in shape of binary numbers, each cell corresponds to an action
-binaries = [format(i, '020b') for i in range(4)]
-combos = {}
-# iterate through every combination
-k = 1
-for binary in binaries:
-    combo = {'actions': '', 'cout': 0, 'profit': 0}
-    # iterate through each cell and if equals to one, take in account the corresponding action
-    for index, cell in enumerate(binary):
-        if cell == '1':
-            action = f'action{index+1}'
-            cout = actions[f'action{index+1}']['cout']
-            profit = actions[f'action{index+1}']['cout'] * \
-                actions[f'action{index+1}']['profit'] // 100
-            # increment combo
-            combo['actions'] += f'{action} '
-            combo['cout'] += cout
-            combo['profit'] += profit
-    # append the combo to the list of combos
-    if combo:
-        combos[f'combo{k}'] = combo
-        k += 1
-
-# trie final des combos
-i = 0
-result = ''
-for key, value in combos.items():
-    if int(value['profit']) > i:
-        result = key, value
-        i = value['profit']
