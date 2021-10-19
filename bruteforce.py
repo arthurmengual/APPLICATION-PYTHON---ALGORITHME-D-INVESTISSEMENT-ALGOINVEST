@@ -1,3 +1,5 @@
+import operator
+
 
 actions = {'action1': {'cout': 20, 'profit': 5}, 'action2': {'cout': 30, 'profit': 10}, 'action3': {'cout': 50, 'profit': 15}, 'action4': {'cout': 70, 'profit': 20},
            'action5': {'cout': 60, 'profit': 17}, 'action6': {'cout': 80, 'profit': 25}, 'action7': {'cout': 22, 'profit': 7}, 'action8': {'cout': 26, 'profit': 11},
@@ -9,26 +11,68 @@ actions = {'action1': {'cout': 20, 'profit': 5}, 'action2': {'cout': 30, 'profit
 
 def check_best_combo(liste):
     binaries = [format(i, '020b') for i in range(2**len(liste))]
+    combos = {}
+    # iterate through every combination
+    k = 1
     for binary in binaries:
-        actions_combo = []
-        for cell in binary:
+        combo = {'actions': '', 'cout': 0, 'profit': 0}
+        # iterate through each cell and if equals to one, take in account the corresponding action
+        for index, cell in enumerate(binary):
             if cell == '1':
-                index = binary.index(cell)
-                actions_combo.append(actions[f'action{index+1}'])
+                action = f'action{index+1}'
+                cout = actions[f'action{index+1}']['cout']
+                profit = actions[f'action{index+1}']['cout'] * \
+                    actions[f'action{index+1}']['profit'] // 100
+                # increment combo
+                combo['actions'] += f'{action} '
+                combo['cout'] += cout
+                combo['profit'] += profit
+        # append the combo to the list of combos
+        if combo:
+            combos[f'combo{k}'] = combo
+            k += 1
+
+    # trie final des combos
+    i = 0
+    result = ''
+    for key, value in combos.items():
+        if int(value['profit']) > i:
+            result = key, value
+            i = value['profit']
+
+    return result
 
 
+print(check_best_combo(actions))
+
+
+# generate all combinations in shape of binary numbers, each cell corresponds to an action
 binaries = [format(i, '020b') for i in range(4)]
-
-liste_of_combos = []
+combos = {}
+# iterate through every combination
+k = 1
 for binary in binaries:
-    actions_combos = []
-    for cell in binary:
+    combo = {'actions': '', 'cout': 0, 'profit': 0}
+    # iterate through each cell and if equals to one, take in account the corresponding action
+    for index, cell in enumerate(binary):
         if cell == '1':
-            index = binary.index(cell)
-            action = f'action n° {index+1}'
-            cout = f"cout: {actions[f'action{index+1}']['cout']}"
-            profit = f"profit: {actions[f'action{index+1}']['cout'] * actions[f'action{index+1}']['profit'] //100}"
-            actions_combos.append((action, cout, profit))
-    liste_of_combos.append(actions_combos)
+            action = f'action{index+1}'
+            cout = actions[f'action{index+1}']['cout']
+            profit = actions[f'action{index+1}']['cout'] * \
+                actions[f'action{index+1}']['profit'] // 100
+            # increment combo
+            combo['actions'] += f'{action} '
+            combo['cout'] += cout
+            combo['profit'] += profit
+    # append the combo to the list of combos
+    if combo:
+        combos[f'combo{k}'] = combo
+        k += 1
 
-print(liste_of_combos)
+# trie final des combos
+i = 0
+result = ''
+for key, value in combos.items():
+    if int(value['profit']) > i:
+        result = key, value
+        i = value['profit']
