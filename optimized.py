@@ -1,6 +1,9 @@
 import csv
-import json
-import operator
+
+
+###get data###
+
+file_path_ = input('Enter the path of the file you want to analyse: ')
 
 data = {}
 file_path = 'data/dataset1_Python+P7.csv'
@@ -10,85 +13,57 @@ with open(file_path, 'r') as file:
     for rows in csvreader:
         data[rows['name']] = {'price': rows['price'], 'profit': rows['profit']}
 
-
-for elt in data:
-    res = f"{elt} : prix: {data[elt]['price']} // profit: {data[elt]['profit']}"
-
-##PSEUDO CODE##
-
-# pour chaque combinaison possible d'action:
-
-# si le cout inferieur à 200euros:
-    # pour chaque action de la combinaison
-    # incrémenter la liste des actions et la somme des profits
-    # appender la liste des actions et somme des profits au resultat
-# sinon
-    # break
-# trier la liste résultat
-# retourner la combinaison avec le meilleu profi()
+lst_actions = [(elt, float(data[elt]['price']), float(
+    data[elt]['profit'])) for elt in data]
 
 
-#####ALGORITHME GLOUTON#######
-result = []
-for elt in data:
-    if data[elt]['price'] != '0':
-        ratio = float(data[elt]['profit'])//float(data[elt]['price'])
-
-    result.append({'name': elt, 'ratio': ratio, 'price': data[elt]['price']})
-
-result = sorted(result, key=operator.itemgetter('ratio'), reverse=True)
-
-total = 0
-solution = []
-for action in result:
-    if total <= 200:
-        total += float(action['price'])
-        solution.append(action)
-    else:
-        break
-
-del solution[-1]
+###optimized algorithm to check the best combination of actions###
 
 
-###ALGORITHME####
+def main(liste, budget):
+    # create a matrice with zeros corresponding to an objetct and a maximum budget
+    matrice = [[0 for i in range(budget + 1)] for x in range(len(liste) + 1)]
+    # go through each cell
+    for i in range(1, len(liste)+1):
+        for c in range(1, budget+1):
+            # if acutal element cost is inferior to the maximum budget
+            if liste[i-1][1] <= c:
+                # compare the profit of this object plus the maximum profit for the remaining budget and the last maximum profit
+                # keep the best profit
+                matrice[i][c] = max(
+                    liste[i-1][2] + matrice[i-1][c-liste[i-1][1]], matrice[i-1][c])
+            # if actual element cost superior to budget, then keep the las best profit for this object
+            else:
+                matrice[i][c] = matrice[i-1][c]
+
+    # find the list of elements with the sum
+
+    b = budget
+    n = len(liste)
+    result = []
+
+    while b >= 0 and n >= 0:
+        e = liste[n-1]
+        if matrice[n][b] == matrice[n-1][b-e[1]] + e[2]:
+            result.append(e)
+            b -= 1
+
+        n -= 1
+
+    return matrice[-1][-1], result
 
 
-# n => nombre d'objets = 1
-# cout
-# gain
-# pour chaque action des actions
-# incrementer cout et gain
+print(main(lst_actions, 500))
 
 
-# combinaisons possible avec un element
-# combinaisons possibles avec 2 elt
-# ....avec n element => derniere combinaison = toute la liste
-
-# for i in range(20) => i nombre d'actions dans une combinaison
-# for j in range(i, len(actions)
-
-
-# def test_2_actions():
-# init res
-# for i in range(0, 20):
-# for j in range(i+1, 20):
-# val1 = actions[i]
-# val2 = actions[j]
-# res = val1 + val2
-# si res < total_portefeuille
-# si res > res davant => on remplace res davant
-# return res
+# test optimized with 20 actions
+liste_actions = [('action1', 20, 1), ('action2', 30, 3), ('action3',  50, 7), ('action4', 70, 14), ('action5', 60, 10),
+                 ('action6', 80, 20), ('action7', 22,  1), ('action8',
+                                                            26, 2), ('action9', 48, 6), ('action10', 34, 9),
+                 ('action11', 42, 7), ('action12', 110, 9), ('action13',
+                                                             38, 8), ('action14', 14, 0), ('action15', 18, 0),
+                 ('action16', 8, 0), ('action17', 4, 0), ('action18', 10, 1), ('action19', 24, 5), ('action20', 114, 20)]
 
 
-# def 3_actions():
-# init res
-# for i in range(0, 20):
-# for j in range(i+1, 20):
-# for k in range(j+1, 20):
-# val1 = actions[i]
-# val2 = actions[j]
-# val3 = actions[k]
-# res = val1 + val2 + val3
-# si res < total_portefeuille
-# si res > res d'avant => on remplace res davant
-# return res
+if __name__ == "__main__":
+    main()

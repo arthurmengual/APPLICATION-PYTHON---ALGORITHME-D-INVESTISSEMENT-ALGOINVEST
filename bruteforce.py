@@ -1,5 +1,6 @@
-import operator
-
+import matplotlib.pyplot as plt
+import time
+import itertools
 
 actions = {'action1': {'cout': 20, 'profit': 5}, 'action2': {'cout': 30, 'profit': 10}, 'action3': {'cout': 50, 'profit': 15}, 'action4': {'cout': 70, 'profit': 20},
            'action5': {'cout': 60, 'profit': 17}, 'action6': {'cout': 80, 'profit': 25}, 'action7': {'cout': 22, 'profit': 7}, 'action8': {'cout': 26, 'profit': 11},
@@ -9,7 +10,12 @@ actions = {'action1': {'cout': 20, 'profit': 5}, 'action2': {'cout': 30, 'profit
            }
 
 
-def check_best_combo(liste):
+####This function takes in parameter a list of actions and the budget of the client.###
+### It analyses all possible combinations and return the one with the higher profit,###
+### within the client's budget###
+
+
+def check_best_combo(liste, budget):
     binaries = [format(i, '020b') for i in range(2**len(liste))]
     combos = {}
     # iterate through every combination
@@ -21,8 +27,8 @@ def check_best_combo(liste):
             if cell == '1':
                 action = f'action{index+1}'
                 cout = actions[f'action{index+1}']['cout']
-                profit = actions[f'action{index+1}']['cout'] * \
-                    actions[f'action{index+1}']['profit'] // 100
+                profit = float(actions[f'action{index+1}']['cout'] *
+                               actions[f'action{index+1}']['profit'] / 100)
                 # increment combo
                 combo['actions'] += f'{action} '
                 combo['cout'] += cout
@@ -32,11 +38,11 @@ def check_best_combo(liste):
             combos[f'combo{k}'] = combo
             k += 1
 
-    # trie final des combos
+    # sorting of combos
     i = 0
     result = ''
     for key, value in combos.items():
-        if value['cout'] < 500:
+        if value['cout'] < budget:
             if i < int(value['profit']):
                 result = key, value
                 i = value['profit']
@@ -44,4 +50,45 @@ def check_best_combo(liste):
     return result
 
 
-print(check_best_combo(actions))
+##ANALYSING BRUTEFORCE ALGORITHM COMPLEXITY##
+
+
+#1 action execution delay#
+
+# check time before execution
+time1 = time.time()
+check_best_combo(dict(itertools.islice(actions.items(), 10)), 500)
+# check time after execution
+time2 = time.time()
+delay1 = time2 - time1
+
+
+#5 action execution delay#
+
+time1 = time.time()
+check_best_combo(dict(itertools.islice(actions.items(), 15)), 500)
+time2 = time.time()
+delay2 = time2 - time1
+
+
+#10 action execution delay#
+
+time1 = time.time()
+check_best_combo(dict(itertools.islice(actions.items(), 20)), 500)
+time2 = time.time()
+delay3 = time2 - time1
+
+
+###graph###
+abscisse = [10, 15, 20]
+ordonnées = [delay1, delay2, delay3]
+
+plt.figure(figsize=(12, 8))
+plt.title('Bruteforce algorithm')
+plt.xlabel('nb of actions')
+plt.ylabel('time of execution')
+plt.plot(abscisse, ordonnées,
+         lw='2', ls='--', c='red', label='complexity')
+plt.legend()
+plt.show()
+# plt.savefig('bruteforce_graphe.png')
