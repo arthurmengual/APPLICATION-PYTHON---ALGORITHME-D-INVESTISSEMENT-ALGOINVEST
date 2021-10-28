@@ -15,7 +15,7 @@ actions = {'action1': {'cout': 20, 'profit': 5}, 'action2': {'cout': 30, 'profit
 ### within the client's budget###
 
 
-def check_best_combo(liste, budget):
+def bruteforce(liste, budget):
     binaries = [format(i, '020b') for i in range(2**len(liste))]
     combos = {}
     # iterate through every combination
@@ -50,14 +50,15 @@ def check_best_combo(liste, budget):
     return result
 
 
+#print(bruteforce(actions, 500))
+
 ##ANALYSING BRUTEFORCE ALGORITHM COMPLEXITY##
 
 
 #1 action execution delay#
-
 # check time before execution
 time1 = time.time()
-check_best_combo(dict(itertools.islice(actions.items(), 10)), 500)
+bruteforce(dict(itertools.islice(actions.items(), 10)), 500)
 # check time after execution
 time2 = time.time()
 delay1 = time2 - time1
@@ -66,7 +67,7 @@ delay1 = time2 - time1
 #5 action execution delay#
 
 time1 = time.time()
-check_best_combo(dict(itertools.islice(actions.items(), 15)), 500)
+bruteforce(dict(itertools.islice(actions.items(), 15)), 500)
 time2 = time.time()
 delay2 = time2 - time1
 
@@ -74,7 +75,7 @@ delay2 = time2 - time1
 #10 action execution delay#
 
 time1 = time.time()
-check_best_combo(dict(itertools.islice(actions.items(), 20)), 500)
+bruteforce(dict(itertools.islice(actions.items(), 20)), 500)
 time2 = time.time()
 delay3 = time2 - time1
 
@@ -84,11 +85,20 @@ abscisse = [10, 15, 20]
 ordonnées = [delay1, delay2, delay3]
 
 plt.figure(figsize=(12, 8))
-plt.title('Bruteforce algorithm')
+plt.title('Bruteforce \n Complexité: x')
 plt.xlabel('nb of actions')
 plt.ylabel('time of execution')
 plt.plot(abscisse, ordonnées,
          lw='2', ls='--', c='red', label='complexity')
 plt.legend()
-plt.show()
+# plt.show()
 # plt.savefig('bruteforce_graphe.png')
+
+
+# courbe pour optimiser
+# algo optimisé naif genre glouton ou autre
+# cours sur la complexité
+# checker ce que veux oc pour continuer les tâches
+# noter à côté des courbes la complexité pour chaque alog (expo, loga, ...)
+# comparer result avec les diffts algo
+###
