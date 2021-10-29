@@ -50,7 +50,7 @@ def bruteforce(liste, budget):
     return result
 
 
-#print(bruteforce(actions, 500))
+print(bruteforce(actions, 500))
 
 ##ANALYSING BRUTEFORCE ALGORITHM COMPLEXITY##
 

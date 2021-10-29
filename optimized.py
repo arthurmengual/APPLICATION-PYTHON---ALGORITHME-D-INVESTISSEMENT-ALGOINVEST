@@ -6,11 +6,16 @@ from matplotlib import pyplot as plt
 
 
 ###get data###
-
-# file_path_ = input('Enter the path of the file you want to analyse: ')
+user_input = ''
+while user_input not in ('1', '2'):
+    user_input = input(
+        'Enter the path of the file you want to analyse (press 1 for data1 / 2 for data2): \n')
 
 lst_actions = []
-file_path = 'data/dataset1_Python+P7.csv'
+if user_input == '1':
+    file_path = 'data/dataset1_Python+P7.csv'
+elif user_input == '2':
+    file_path = 'data/dataset2_Python+P7.csv'
 
 with open(file_path, 'r') as file:
     csvreader = csv.DictReader(file)
@@ -90,15 +95,18 @@ def optimized(liste, budget):
     combo_list = []
     combo_profit = 0
     for action in sorted_lst:
+        # if still money in the budget
         if budget - action['price'] >= 0:
+            # add the profit and the name of the action to the combo
             combo_list.append(action['name'])
             combo_profit += action['profit']
+            # decrement budget
             budget -= action['price']
 
-    return (combo_list, combo_profit, budget)
+    return (f'Purchase of {len(combo_list)} actions: \n {combo_list}, \n Total returns: {combo_profit}, \n Total cost: {500-budget}')
 
 
-print(optimized(actions, 500))
+print(optimized(lst_actions, 500))
 
 ##ANALYSING BRUTEFORCE ALGORITHM COMPLEXITY##
 
