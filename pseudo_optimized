@@ -1,0 +1,21 @@
+Début
+
+liste <- action FOR action dans liste d'action SI profit et cout different de zéro
+
+FOR each action dans liste d'action:
+    ratio <- profit / cout
+
+Trie  décroissant de la liste par ratio des l'action
+
+combinaison = vide
+profit = zéro
+
+FOR action dans la liste triée:
+    if budget + cout de l'action >= 0:
+        ajoute l'action à la combinaison
+        ajoute au profit total le profit de l'action
+        decrement le budget du cout de l'action
+
+RETOURNER combinaison + profit + cout
+
+Fin

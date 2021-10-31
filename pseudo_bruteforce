@@ -1,1 +1,21 @@
-#
+Début
+
+FOR i compris entre 0 et 2 puissance longueur de la liste:
+    creer toutes les combinaisons de nombres binaires
+
+FOR each binary number in the list:
+    combinaison <- liste = '', cout = 0, profit = 0
+    FOR each number of the binary number:
+        if number == 1:
+            incrementer la combinaison avec l'action correspondante
+    Ajouter la combinaison à la liste des combinaisons        
+
+resultat <- vide
+For each combinaison dans la liste de combinaison:
+    si le cout total est inférieur au budget:
+        si le profit de cette combinaison est supérieur au profit de resultat:
+            alors remplacer resultat par cette combinaison
+
+Retourner liste de combinaison avec le plus gros profit + prix + cout
+
+Fin

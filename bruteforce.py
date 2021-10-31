@@ -38,7 +38,7 @@ def bruteforce(liste, budget):
             combos[f'combo{k}'] = combo
             k += 1
 
-    # sorting of combos
+    # sorting of combos and keep the one with the maximum profit
     i = 0
     result = ''
     for key, value in combos.items():
@@ -50,7 +50,7 @@ def bruteforce(liste, budget):
     return result
 
 
-print(bruteforce(actions, 500))
+#print(bruteforce(actions, 500))
 
 ##ANALYSING BRUTEFORCE ALGORITHM COMPLEXITY##
 
@@ -95,10 +95,11 @@ plt.legend()
 # plt.savefig('bruteforce_graphe.png')
 
 
-# courbe pour optimiser
-# algo optimisé naif genre glouton ou autre
 # cours sur la complexité
-# checker ce que veux oc pour continuer les tâches
 # noter à côté des courbes la complexité pour chaque alog (expo, loga, ...)
+# checker ce que veux oc pour continuer les tâches
 # comparer result avec les diffts algo
 ###
+
+
+# questions pour ranga: comment faire sans passer par les binaires

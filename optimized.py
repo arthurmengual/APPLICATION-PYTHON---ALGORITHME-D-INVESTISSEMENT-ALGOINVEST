@@ -1,6 +1,5 @@
 import csv
 from operator import itemgetter
-import itertools
 import time
 from matplotlib import pyplot as plt
 
@@ -11,12 +10,12 @@ while user_input not in ('1', '2'):
     user_input = input(
         'Enter the path of the file you want to analyse (press 1 for data1 / 2 for data2): \n')
 
-lst_actions = []
 if user_input == '1':
     file_path = 'data/dataset1_Python+P7.csv'
 elif user_input == '2':
     file_path = 'data/dataset2_Python+P7.csv'
 
+lst_actions = []
 with open(file_path, 'r') as file:
     csvreader = csv.DictReader(file)
     for rows in csvreader:
@@ -151,7 +150,7 @@ plt.legend()
 
 
 # cours sur la complexité
-# checker ce que veux oc pour continuer les tâches
 # noter à côté des courbes la complexité pour chaque alog (expo, loga, ...)
+# checker ce que veux oc pour continuer les tâches
 # comparer result avec les diffts algo
 ###
