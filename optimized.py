@@ -2,6 +2,7 @@ import csv
 from operator import itemgetter
 import time
 from matplotlib import pyplot as plt
+import numpy as np
 
 
 ###get data###
@@ -84,11 +85,14 @@ actions = [{'name': 'action1', 'price': 20, 'profit': 5*20/100}, {'name': 'actio
 
 def optimized(liste, budget):
     # clean data
-    liste = [x for x in liste if x['price'] != 0 and x['profit'] != 0]
+    liste = [x for x in liste if x['price'] != 0 and x['profit']
+             != 0 and x['price'] > 0 and x['profit'] > 0]
     # calcultate for each action the ratio between the cost and the profit
     for action in liste:
-        action['ratio'] = action['profit']/action['price']
-    # sort by ratio's decreasing order
+        action['rentability'] = action['profit']/action['price']
+        action['benefice'] = action['price']*action['profit']/100
+        action['ratio'] = action['rentability'] * action['benefice']/1001
+    # sort by profit and by ratio's decreasing order
     sorted_lst = sorted(liste, key=itemgetter('ratio'), reverse=True)
     # make the combination with the highest ratios
     combo_list = []
@@ -98,7 +102,7 @@ def optimized(liste, budget):
         if budget - action['price'] >= 0:
             # add the profit and the name of the action to the combo
             combo_list.append(action['name'])
-            combo_profit += action['profit']
+            combo_profit += action['benefice']
             # decrement budget
             budget -= action['price']
 
@@ -109,43 +113,31 @@ print(optimized(lst_actions, 500))
 
 ##ANALYSING BRUTEFORCE ALGORITHM COMPLEXITY##
 
-#1 action execution delay#
-# check time before execution
-time1 = time.time()
-optimized(actions[5: 10], 500)
-# check time after execution
-time2 = time.time()
-delay1 = time2 - time1
-
-
-#5 action execution delay#
-
-time1 = time.time()
-optimized(actions[10: 15], 500)
-time2 = time.time()
-delay2 = time2 - time1
-
-
-#10 action execution delay#
-
-time1 = time.time()
-optimized(actions[15: 20], 500)
-time2 = time.time()
-delay3 = time2 - time1
+points = []
+for i in range(len(actions)):
+    time1 = time.time()
+    optimized(actions[0: i], 500)
+    time2 = time.time()
+    delay = time2 - time1
+    points.append(delay)
 
 
 ###graph###
-abscisse = [10, 15, 20]
-ordonnées = [delay1, delay2, delay3]
+abscisse = [x for x in range(len(actions))]
+ordonnées = points
 
 plt.figure(figsize=(12, 8))
 plt.title('Optimized \n Complexité: x')
 plt.xlabel('nb of actions')
 plt.ylabel('time of execution')
-plt.plot(abscisse, ordonnées,
-         lw='2', ls='--', c='red', label='complexity')
-plt.legend()
-# plt.show()
+plt.scatter(abscisse, ordonnées)
+
+z = np.polyfit(abscisse, ordonnées, 1)
+p = np.poly1d(z)
+plt.plot(abscisse, p(abscisse), "r--")
+
+# plt.legend()
+plt.show()
 # plt.savefig('bruteforce_graphe.png')
 
 
@@ -154,3 +146,39 @@ plt.legend()
 # checker ce que veux oc pour continuer les tâches
 # comparer result avec les diffts algo
 ###
+
+# SOUTENANCE
+
+# Présentation de vos algorithmes [10 minutes] :
+# Comparez votre solution bruteforce avec la solution optimisée.
+# Soyez prêt à répondre aux questions suivantes:
+# Pourquoi faut-il autant de temps pour fournir une réponse avec un ensemble de données plus important ?
+# Votre algorithme n'a pas à calculer toutes les réponses possibles. Comment y êtes-vous parvenu ?
+
+# Présentation des résultats de votre algorithme[5 minutes]:
+# Rapport d'exploration des ensembles de données.
+# Présentation des résultats de votre algorithme, et comparaison critique avec celui de Sienna.
+
+# Discussion[10 minutes]:
+# Jouant le rôle de Sienna, l'évaluateur vous posera des questions sur votre méthodologie et vos résultats.
+
+# Débriefing[5 minutes]:
+# À la fin des sessions, l'évaluateur cessera de jouer le rôle de Sienna, afin que vous puissiez faire un débriefing ensemble.
+
+
+# LIVRABLES
+
+# Un fichier Python `bruteforce.py` avec la solution de force brute.
+# Un fichier Python `optimized.py` avec la version optimisée de l'algorithme.
+
+# Un jeu de diapositives(PowerPoint, PDF, Google Slides, Prezi) expliquant ce qui suit(20 diapositives maximum):
+# la solution optimisée, y compris:
+# l'analyse de l'algorithme de force brute,
+# un diagramme/agenda/pseudocode,
+# l'algorithme choisi et ses limites,
+# l'analyse des performances et de l'efficacité de vos algorithmes
+
+# une comparaison côte à côte entre la sortie de votre algorithme et les choix de Sienna, via un rapport d'exploration de l'ensemble des données.
+
+
+# courbe de tendance
